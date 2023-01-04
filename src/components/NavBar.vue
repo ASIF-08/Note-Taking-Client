@@ -21,7 +21,7 @@
           >
           </b-form-input>
           <b-nav-item to="LogIn">Login</b-nav-item>
-          <b-nav-item href="#">SignUp</b-nav-item>
+          <b-nav-item to="SignUp">SignUp</b-nav-item>
         </b-navbar-nav>
       </b-navbar>
     </div>
