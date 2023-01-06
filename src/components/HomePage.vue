@@ -47,11 +47,12 @@
               scale="2.5"
               animation="pulse"
               title="Completed"
-              ></b-icon
-            >
+            ></b-icon>
           </b-card>
         </b-col>
+      
         <b-col cols="3">
+          <router-link to="ListAll" style="text-decoration:none">
           <b-card
             path="/detailedview"
             bg-variant="dark"
@@ -59,11 +60,15 @@
             header="View All"
             font-size="80px"
             align="center"
+            
           >
             <b-card-text style="font-size: 50px">5</b-card-text>
-            <b-icon to="detailedview" icon="card-list" scale="2.5"></b-icon>
+
+            <b-icon to="detailedView" icon="card-list" scale="2.5"></b-icon>
           </b-card>
+        </router-link>
         </b-col>
+      
       </b-row>
       <!-- </b-card-group> -->
 
@@ -72,7 +77,7 @@
         <b-progress
           :max="max"
           height="3rem"
-          style="width: 100%; border-style:solid; color:gray;"
+          style="width: 100%; border-style: solid; color: gray"
           variant="secondary"
         >
           <b-progress-bar :value="value">

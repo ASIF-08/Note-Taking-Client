@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" >
     <!-- <b-table striped hover :items="items" @click.prevent="selectedPage ='DetailedView.vue'"> </b-table> -->
 
     <!-- <b-icon to="detailedview" icon="pencil" scale="1.25"></b-icon>
