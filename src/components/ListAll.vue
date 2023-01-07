@@ -29,7 +29,7 @@
               ><b-icon to="detailedview" icon="pencil" scale="1.25"></b-icon
             ></b-col>
             <b-col
-              ><b-icon to="detailedview" icon="trash-fill" scale="1.25"></b-icon
+              ><b-icon @click="remove" icon="trash-fill" scale="1.25"></b-icon
             ></b-col>
           </b-row>
         </b-card>

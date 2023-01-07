@@ -5,7 +5,12 @@
       <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-          <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+          <form
+            name="from"
+            @submit.prevent="onSubmit"
+            @reset="onReset"
+            v-if="show"
+          >
             <b-form-group
               id="input-group-1"
               label="Email address:"
@@ -35,24 +40,73 @@
               ></b-form-input>
             </b-form-group>
             <div class="pt-2">
-              <b-button type="submit" variant="primary" to="/">Login</b-button>
+              <b-button type="submit" variant="primary">Login</b-button>
               <b-button type="reset" variant="danger" class="m-1"
                 >Cancel</b-button
               >
             </div>
-          </b-form>
+          </form>
         </div>
         <div class="col-md-3"></div>
       </div>
-
-      <!-- <b-card class="mt-3" header="Form Data Result">
-      <pre class="m-0">{{ form }}</pre>
-    </b-card> -->
     </div>
+    <!-- <div>
+      <b-modal id="modal-center" centered title="BootstrapVue">
+        <div class="container pt-5">
+          <h1 align="center" style="">Sign In</h1>
+          <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+              <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+                <b-form-group
+                  id="input-group-1"
+                  label="Email address:"
+                  label-for="input-1"
+                  description="We'll never share your email with anyone else."
+                >
+                  <b-form-input
+                    id="input-1"
+                    v-model="form.email"
+                    type="email"
+                    placeholder="Enter Your E-mail ID"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+
+                <b-form-group
+                  id="input-group-2"
+                  label="Password:"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    id="input-2"
+                    type="password"
+                    v-model="form.password"
+                    placeholder="Enter Your Password"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+                <div class="pt-2">
+                  <b-button type="submit" variant="primary" to="/"
+                    >Login</b-button
+                  >
+                  <b-button type="reset" variant="danger" class="m-1"
+                    >Cancel</b-button
+                  >
+                </div>
+              </b-form>
+            </div>
+            <div class="col-md-3"></div>
+          </div>
+        </div>
+      </b-modal>
+    </div> -->
   </div>
 </template>
 
 <script>
+// import auth from "@/services/auth";
+import Vue from "vue";
 export default {
   name: "LogIn",
   data() {
@@ -64,11 +118,14 @@ export default {
       show: true,
     };
   },
+
   methods: {
-    onSubmit(event) {
-      event.preventDefault();
-      alert(JSON.stringify(this.form));
-    },
+    // onSubmit(event)
+    // {
+    //   event.preventDefault();
+    //   alert(JSON.stringify(this.form));
+    //   auth.login(this.form);
+    // },
     onReset(event) {
       event.preventDefault();
       // Reset our form values
@@ -79,6 +136,29 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
+    },
+    async onSubmit() {
+      // this.$v.form.$touch();
+      // if (!this.$v.form.$invalid) {
+        this.$store
+          .dispatch("login", this.form)
+          .then(() => this.$router.push({ name: "home" }))
+          .catch((error) => {
+            Vue.$toast.open({
+              message: error.response.data.message,
+              duration: 2000,
+              type: "error",
+            });
+          });
+      // } else {
+      //   console.log("invalid input values");
+      // }
+    },
+    shouldAppendValidClass(field) {
+      return !field.$invalid && field.$model && field.$dirty;
+    },
+    shouldAppendErrorClass(field) {
+      return field.$error;
     },
   },
 };
@@ -106,9 +186,9 @@ export default {
   width: 768px;
   max-width: 100%;
   min-height: 480px;
-  color: #D0D0D0;
+  color: #d0d0d0;
 }
-body{
+body {
   background-color: aqua;
 }
 </style>
