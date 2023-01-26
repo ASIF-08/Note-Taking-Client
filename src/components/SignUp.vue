@@ -12,8 +12,8 @@
             >
               <b-form-input
                 id="input-1"
-                v-model="form.email"
-                type="firstname"
+                v-model="form.firstname"
+                type="text"
                 placeholder="Enter Your First Name:"
                 required
               ></b-form-input>
@@ -27,8 +27,8 @@
             >
               <b-form-input
                 id="input-1"
-                v-model="form.email"
-                type="elastname"
+                v-model="form.lastname"
+                type="text"
                 placeholder="Enter Your Last Name:"
                 required
               ></b-form-input>
@@ -61,23 +61,23 @@
           ></b-form-input>
         </b-form-group>
         <div class="pt-2">
-          <b-button type="submit" variant="primary" to="/">Sign Up</b-button>
+          <b-button type="submit" variant="primary">Sign Up</b-button>
           <b-button type="reset" variant="danger" class="m-1">Cancel</b-button>
         </div>
       </b-form>
-      <!-- <b-card class="mt-3" header="Form Data Result">
-      <pre class="m-0">{{ form }}</pre>
-    </b-card> -->
     </div>
   </div>
 </template>
 
 <script>
+import auth from "@/services/auth";
 export default {
   name: "SignUp",
   data() {
     return {
       form: {
+        firstname: "",
+        lastname: "",
         email: "",
         password: "",
       },
@@ -85,13 +85,31 @@ export default {
     };
   },
   methods: {
-    onSubmit(event) {
-      event.preventDefault();
-      alert(JSON.stringify(this.form));
+    async onSubmit(event) {
+      try {
+        event.preventDefault();
+        await auth.register(this.form);
+        this.$router.push("/login");
+        this.$root.$bvToast.toast("Registration successful.", {
+          title: "Success",
+          autoHideDelay: 2000,
+          variant: "success",
+          appendToast: true,
+        });
+      } catch (error) {
+        this.$root.$bvToast.toast(error.response.data.message, {
+          title: "Error",
+          autoHideDelay: 2000,
+          variant: "danger",
+          appendToast: true,
+        });
+      }
     },
     onReset(event) {
       event.preventDefault();
       // Reset our form values
+      this.from.firstname = "";
+      this.from.lastname = "";
       this.form.email = "";
       this.form.password = "";
       // Trick to reset/clear native browser form validation state

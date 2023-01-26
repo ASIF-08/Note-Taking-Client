@@ -1,17 +1,17 @@
-import axios from  "axios";
+import axios from "axios";
+import config from "@/config";
 
-
-
-
-const url = "http://localhost:3001/api";
-
-
-export const login =  async(userData) => {
-    console.log("hello", userData);
-    const response = await axios.get(url);
-    console.log("response --> ", response.data)
+const login = async (userData) => {
+    const response = await axios.post(`${config.BASE_URL}/api/auth/login`, userData);
     return response.data.data;
 };
+
+const register = async (userData) => {
+    const response = await axios.post(`${config.BASE_URL}/api/auth/register`, userData);
+    return response.data.data;
+};
+
 export default {
-    login
+    login,
+    register
 };

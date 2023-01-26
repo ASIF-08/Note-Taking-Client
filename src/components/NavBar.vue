@@ -11,17 +11,12 @@
           <b-nav-item href="#">About</b-nav-item>
           <b-nav-item href="#">Contact</b-nav-item>
         </b-navbar-nav>
-        <b-navbar-nav class="ms-auto px-2">
-          <b-form-input
-            class="my-1 mx-2"
-            style="width: 35em; height: 2em"
-            placeholder="Search"
-            v-model="query"
-            @keyup.enter="search"
+        <b-navbar-nav class="ml-auto px-2">
+          <b-nav-item v-if="!authenticated" to="login" v-b-modal.modal-center
+            >Login</b-nav-item
           >
-          </b-form-input>
-          <b-nav-item  to="LogIn" v-b-modal.modal-center>Login</b-nav-item>
-          <b-nav-item to="SignUp">SignUp</b-nav-item>
+          <b-nav-item v-if="!authenticated" to="SignUp">SignUp</b-nav-item>
+          <b-nav-item v-if="authenticated" @click="logout">Logout</b-nav-item>
         </b-navbar-nav>
       </b-navbar>
     </div>
@@ -29,28 +24,26 @@
     <div>
       <b-sidebar
         id="sidebar-backdrop"
-        :backdrop-variant="variant"
+        backdrop-variant="dark"
         backdrop
         shadow
         no-header
         bg-variant="dark"
         text-variant="light"
       >
-        <!-- <div class="px-3 py-2">
-        <b-form-group label="Backdrop variant" label-for="backdrop-variant">
-          <b-form-select id="backdrop-variant" v-model="variant" :options="variants"></b-form-select>
-        </b-form-group>
-      </div> -->
-      <!-- Side Bar -->
+        <!-- Side Bar -->
         <div>
-          <b-avatar
-            style="width: 100px; height: 100px; margin-left: 100px"
-          ></b-avatar>
+          <div class="d-flex">
+            <b-avatar
+              style="width: 8em; height: 8em"
+              class="mx-auto"
+            ></b-avatar>
+          </div>
           <nav class="mb-3">
             <b-nav vertical>
               <b-nav-item active to="/">Dashboard</b-nav-item>
-              <b-nav-item to="ListAll">View All</b-nav-item>
-              <b-nav-item href="#link-2">Favourite</b-nav-item>
+              <b-nav-item to="/listall">View All</b-nav-item>
+              <b-nav-item to="/favourite">Favourite</b-nav-item>
             </b-nav>
           </nav>
         </div>
@@ -62,16 +55,33 @@
 <script>
 export default {
   name: "NavBar",
-  
+  computed: {
+    authenticated() {
+      return this.$store.getters.isAuthenticated;
+    },
+  },
   methods: {
-    search() {
-      console.log(this.query);
-      this.query = "";
+    logout() {
+      this.$store
+        .dispatch("logout")
+        .then(() => {
+          this.$router.push("/");
+          this.$root.$bvToast.toast("Logout successful", {
+            title: "Success",
+            autoHideDelay: 2000,
+            variant: "success",
+            appendToast: true,
+          });
+        })
+        .catch((error) => {
+          this.$root.$bvToast.toast(error.response.data.message, {
+            title: "Error",
+            autoHideDelay: 2000,
+            variant: "danger",
+            appendToast: true,
+          });
+        });
     },
   },
 };
 </script>
-
-<style>
-
-</style>
